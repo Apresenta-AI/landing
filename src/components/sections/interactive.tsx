@@ -19,7 +19,7 @@ export function Interactive() {
         />
 
         <BlurFade delay={0.2} className="mt-12">
-          <div className="relative mx-auto max-w-4xl">
+          <div className="relative mx-auto max-w-4xl rounded-2xl">
             <LiveDemo />
             <BorderBeam size={150} duration={11} />
           </div>

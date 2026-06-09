@@ -4,6 +4,7 @@ import {
   Loader2,
   Construction,
   ArrowUpRight,
+  Smartphone,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/logo'
@@ -15,12 +16,21 @@ import { useReleasesContext } from '@/hooks/releases-context'
 import { cn } from '@/lib/utils'
 import { site } from '@/content'
 
+function detectMobile(): boolean {
+  if (typeof navigator === 'undefined') return false
+  const ua = navigator.userAgent
+  if (/Android|iPhone|iPod|Mobile|BlackBerry|IEMobile|Opera Mini/i.test(ua)) return true
+  // iPadOS 13+ reports as "Macintosh" — distinguish by touch support.
+  if (/Macintosh/.test(ua) && (navigator.maxTouchPoints || 0) > 1) return true
+  return false
+}
+
 function detectOS(): string {
   if (typeof navigator === 'undefined') return 'mac'
   const ua = navigator.userAgent
   if (/Win/i.test(ua)) return 'windows'
-  if (/Linux|X11|Android/i.test(ua)) return 'linux'
-  return 'mac' // mac / iOS / unknown
+  if (/Linux|X11/i.test(ua)) return 'linux'
+  return 'mac'
 }
 
 export function Download() {
@@ -28,10 +38,12 @@ export function Download() {
   const repoUrl = `https://github.com/${site.repo.owner}/${site.repo.name}`
   const releasesUrl = `${repoUrl}/releases`
 
+  const isMobile = useMemo(() => detectMobile(), [])
   const osId = useMemo(() => detectOS(), [])
   const primary = site.platforms.find((p) => p.id === osId) ?? site.platforms[0]
-  const others = site.platforms.filter((p) => p.id !== primary.id)
-  const primaryAsset = latest ? matchAsset(latest.assets, primary.match) : undefined
+  // On mobile there's no "your platform" — list all desktop platforms instead.
+  const chips = isMobile ? site.platforms : site.platforms.filter((p) => p.id !== primary.id)
+  const primaryAsset = !isMobile && latest ? matchAsset(latest.assets, primary.match) : undefined
   const PrimaryIcon = PLATFORM_ICONS[primary.icon] ?? DownloadIcon
 
   return (
@@ -55,7 +67,31 @@ export function Download() {
         <BlurFade delay={0.15} className="mx-auto mt-10 max-w-lg">
           {/* primary, OS-detected card */}
           <div className="rounded-2xl border border-border bg-card p-6 text-left shadow-sm sm:p-7">
-            {status === 'loading' ? (
+            {isMobile ? (
+              <>
+                <div className="flex items-start gap-4">
+                  <div className="grid size-11 shrink-0 place-items-center rounded-xl bg-muted text-muted-foreground">
+                    <Smartphone className="size-6" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                      App de desktop
+                    </p>
+                    <h3 className="text-lg font-semibold">Ainda não temos app para celular</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      O Apresenta.AI roda no computador — macOS, Windows e Linux. Abra
+                      esta página no desktop para baixar.
+                    </p>
+                  </div>
+                </div>
+                <Button asChild variant="outline" className="mt-5 w-full" size="lg">
+                  <a href={releasesUrl} target="_blank" rel="noopener noreferrer">
+                    Ver releases no GitHub
+                    <ArrowUpRight className="size-4" />
+                  </a>
+                </Button>
+              </>
+            ) : status === 'loading' ? (
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Loader2 className="size-5 animate-spin" />
                 Detectando o último release…
@@ -113,10 +149,10 @@ export function Download() {
 
           {/* other platforms */}
           <p className="mt-8 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-            Disponível para
+            {isMobile ? 'Disponível para desktop' : 'Disponível para'}
           </p>
           <div className="mt-3 flex flex-wrap justify-center gap-3">
-            {others.map((p) => {
+            {chips.map((p) => {
               const Icon = PLATFORM_ICONS[p.icon] ?? DownloadIcon
               const asset = latest ? matchAsset(latest.assets, p.match) : undefined
               const content = (

@@ -293,15 +293,17 @@ function RichSlide({ className }: { className?: string }) {
                 key={k}
                 onClick={() => setI(idx)}
                 aria-pressed={on}
+                aria-label={label}
+                title={label}
                 className={cn(
-                  'relative flex min-w-0 items-center justify-center gap-1.5 overflow-hidden rounded-md px-2 py-1.5 text-[11px] transition-colors',
+                  'relative flex min-w-0 items-center justify-center gap-1.5 overflow-hidden rounded-md px-2 py-2 text-[11px] transition-colors sm:py-1.5',
                   on
                     ? 'bg-primary font-semibold text-primary-foreground shadow-sm'
                     : 'font-medium text-muted-foreground hover:bg-accent hover:text-foreground',
                 )}
               >
-                <Icon className="size-3.5 shrink-0" />
-                <span className="truncate">{label}</span>
+                <Icon className="size-4 shrink-0 sm:size-3.5" />
+                <span className="hidden truncate sm:inline">{label}</span>
                 {on && !reduce && (
                   <motion.span
                     key={i}
