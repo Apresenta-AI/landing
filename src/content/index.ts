@@ -28,6 +28,7 @@ export interface Demo {
 
 export interface Site {
   repo: { owner: string; name: string }
+  releasesRepo: { owner: string; name: string }
   product: {
     name: string
     tagline: string

@@ -7,7 +7,7 @@ type ReleasesValue = ReturnType<typeof useReleases>
 const ReleasesContext = createContext<ReleasesValue | null>(null)
 
 export function ReleasesProvider({ children }: { children: ReactNode }) {
-  const value = useReleases(site.repo.owner, site.repo.name)
+  const value = useReleases(site.releasesRepo.owner, site.releasesRepo.name)
   return <ReleasesContext.Provider value={value}>{children}</ReleasesContext.Provider>
 }
 

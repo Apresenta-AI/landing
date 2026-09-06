@@ -15,7 +15,7 @@ import { site } from '@/content'
 
 export function Releases() {
   const { status, releases } = useReleasesContext()
-  const repoUrl = `https://github.com/${site.repo.owner}/${site.repo.name}`
+  const repoUrl = `https://github.com/${site.releasesRepo.owner}/${site.releasesRepo.name}`
 
   return (
     <section

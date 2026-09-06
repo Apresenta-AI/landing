@@ -1,5 +1,6 @@
 {
-  "repo": { "owner": "Eliezir", "name": "apresenta.ai" },
+  "repo": { "owner": "Apresenta-AI", "name": "apresenta.ai" },
+  "releasesRepo": { "owner": "Apresenta-AI", "name": "landing" },
   "product": {
     "name": "Apresenta.AI",
     "tagline": "Mais que slides — experiências interativas em HTML, criadas com IA.",

@@ -36,7 +36,7 @@ function detectOS(): string {
 export function Download() {
   const { status, latest } = useReleasesContext()
   const repoUrl = `https://github.com/${site.repo.owner}/${site.repo.name}`
-  const releasesUrl = `${repoUrl}/releases`
+  const releasesUrl = `https://github.com/${site.releasesRepo.owner}/${site.releasesRepo.name}/releases`
 
   const isMobile = useMemo(() => detectMobile(), [])
   const osId = useMemo(() => detectOS(), [])
