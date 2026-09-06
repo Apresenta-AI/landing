@@ -5,6 +5,7 @@ import { site } from '@/content'
 
 export function Footer() {
   const repoUrl = `https://github.com/${site.repo.owner}/${site.repo.name}`
+  const releasesUrl = `https://github.com/${site.releasesRepo.owner}/${site.releasesRepo.name}/releases`
 
   return (
     <footer className="border-t border-border bg-card/40">
@@ -54,7 +55,7 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href={`${repoUrl}/releases`} target="_blank" rel="noopener noreferrer" className="text-foreground/80 hover:text-primary">
+                <a href={releasesUrl} target="_blank" rel="noopener noreferrer" className="text-foreground/80 hover:text-primary">
                   Todos os releases
                 </a>
               </li>

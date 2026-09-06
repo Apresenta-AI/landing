@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import bundledReleasesData from '@/content/releases.json'
 
 export interface ReleaseAsset {
   name: string
@@ -24,12 +25,29 @@ interface ReleasesState {
   latest: Release | null
 }
 
+const bundledReleases = bundledReleasesData as Release[]
+
+function mergeReleases(remote: Release[] = []): Release[] {
+  const releasesByTag = new Map(
+    bundledReleases.filter((release) => !release.draft).map((release) => [release.tag_name, release]),
+  )
+
+  for (const release of remote) {
+    if (!release.draft) releasesByTag.set(release.tag_name, release)
+  }
+
+  return [...releasesByTag.values()].sort(
+    (a, b) => Date.parse(b.published_at) - Date.parse(a.published_at),
+  )
+}
+
+function releasesState(releases: Release[]): ReleasesState {
+  const latest = releases.find((release) => !release.prerelease) ?? releases[0] ?? null
+  return { status: 'success', releases, latest }
+}
+
 export function useReleases(owner: string, repo: string): ReleasesState {
-  const [state, setState] = useState<ReleasesState>({
-    status: 'loading',
-    releases: [],
-    latest: null,
-  })
+  const [state, setState] = useState<ReleasesState>(() => releasesState(mergeReleases()))
 
   useEffect(() => {
     let cancelled = false
@@ -42,12 +60,11 @@ export function useReleases(owner: string, repo: string): ReleasesState {
       })
       .then((data: Release[]) => {
         if (cancelled) return
-        const releases = data.filter((r) => !r.draft)
-        const latest = releases.find((r) => !r.prerelease) ?? releases[0] ?? null
-        setState({ status: 'success', releases, latest })
+        setState(releasesState(mergeReleases(data)))
       })
       .catch(() => {
-        if (!cancelled) setState({ status: 'error', releases: [], latest: null })
+        // The bundled manifest keeps downloads available when GitHub's
+        // anonymous API is rate-limited, unavailable, or blocked by a client.
       })
     return () => {
       cancelled = true
