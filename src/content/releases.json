@@ -1,5 +1,40 @@
 [
   {
+    "tag_name": "v1.0.1-beta.2",
+    "name": "Apresenta.AI v1.0.1-beta.2",
+    "body": "Beta pública para testes. Corrige a inicialização do runtime empacotado no macOS sem modificar o bundle assinado e mantém os smoke tests nativos para Mac e Windows.",
+    "html_url": "https://github.com/Apresenta-AI/landing/releases/tag/v1.0.1-beta.2",
+    "published_at": "2026-09-06T16:36:17Z",
+    "prerelease": true,
+    "draft": false,
+    "assets": [
+      {
+        "name": "Apresenta.AI-Nova-1.0.1-beta.2.dmg",
+        "size": 354526521,
+        "browser_download_url": "https://github.com/Apresenta-AI/landing/releases/download/v1.0.1-beta.2/Apresenta.AI-Nova-1.0.1-beta.2.dmg",
+        "download_count": 0
+      },
+      {
+        "name": "Apresenta.AI-Nova-1.0.1-beta.2-setup.exe",
+        "size": 292553871,
+        "browser_download_url": "https://github.com/Apresenta-AI/landing/releases/download/v1.0.1-beta.2/Apresenta.AI-Nova-1.0.1-beta.2-setup.exe",
+        "download_count": 0
+      },
+      {
+        "name": "Apresenta.AI-Nova-1.0.1-beta.2.AppImage",
+        "size": 355410401,
+        "browser_download_url": "https://github.com/Apresenta-AI/landing/releases/download/v1.0.1-beta.2/Apresenta.AI-Nova-1.0.1-beta.2.AppImage",
+        "download_count": 0
+      },
+      {
+        "name": "apresenta-ai-nova_1.0.1-beta.2_amd64.deb",
+        "size": 279533748,
+        "browser_download_url": "https://github.com/Apresenta-AI/landing/releases/download/v1.0.1-beta.2/apresenta-ai-nova_1.0.1-beta.2_amd64.deb",
+        "download_count": 0
+      }
+    ]
+  },
+  {
     "tag_name": "v1.0.1-beta.1",
     "name": "Apresenta.AI v1.0.1-beta.1",
     "body": "Primeira versão beta instalável do Apresenta.AI Nova. Inclui instaladores para macOS, Windows e Linux. Estes builds ainda não possuem assinatura de distribuição; consulte as instruções de instalação na página de downloads.",
