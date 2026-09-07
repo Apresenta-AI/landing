@@ -1,10 +1,13 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import {
   Download as DownloadIcon,
   Loader2,
   Construction,
   ArrowUpRight,
   Smartphone,
+  SquareTerminal,
+  Copy,
+  Check,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/logo'
@@ -15,6 +18,9 @@ import { matchAsset, formatBytes, formatDate } from '@/hooks/use-releases'
 import { useReleasesContext } from '@/hooks/releases-context'
 import { cn } from '@/lib/utils'
 import { site } from '@/content'
+
+const MAC_AUTH_COMMAND =
+  'xattr -dr com.apple.quarantine "/Applications/Apresenta.AI Nova.app"'
 
 function detectMobile(): boolean {
   if (typeof navigator === 'undefined') return false
@@ -34,6 +40,7 @@ function detectOS(): string {
 }
 
 export function Download() {
+  const [commandCopied, setCommandCopied] = useState(false)
   const { status, latest } = useReleasesContext()
   const repoUrl = `https://github.com/${site.repo.owner}/${site.repo.name}`
   const releasesUrl = `https://github.com/${site.releasesRepo.owner}/${site.releasesRepo.name}/releases`
@@ -188,6 +195,67 @@ export function Download() {
               )
             })}
           </div>
+
+          <details className="group mt-8 overflow-hidden rounded-xl border border-border bg-card text-left shadow-sm">
+            <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-4 text-sm font-medium transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset [&::-webkit-details-marker]:hidden">
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-muted text-muted-foreground">
+                <SquareTerminal className="size-5" />
+              </span>
+              <span className="min-w-0 flex-1">
+                O macOS bloqueou a abertura?
+                <span className="mt-0.5 block text-xs font-normal text-muted-foreground">
+                  Autorize esta versão beta pelo Terminal.
+                </span>
+              </span>
+              <span className="text-muted-foreground transition-transform group-open:rotate-45" aria-hidden="true">
+                +
+              </span>
+            </summary>
+            <div className="border-t border-border px-4 py-5 sm:px-5">
+              <ol className="space-y-4 text-sm text-muted-foreground">
+                <li className="flex gap-3">
+                  <span className="font-mono text-xs font-semibold text-foreground">01</span>
+                  <span>Abra o arquivo .dmg e arraste o Apresenta.AI Nova para Aplicativos.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="font-mono text-xs font-semibold text-foreground">02</span>
+                  <div className="min-w-0 flex-1">
+                    <p>Abra o Terminal, cole o comando abaixo e pressione Enter.</p>
+                    <div className="mt-3 flex items-center gap-2 rounded-lg bg-foreground p-2 pl-3 text-background">
+                      <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-xs">
+                        {MAC_AUTH_COMMAND}
+                      </code>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          void navigator.clipboard.writeText(MAC_AUTH_COMMAND).then(() => {
+                            setCommandCopied(true)
+                            window.setTimeout(() => setCommandCopied(false), 2000)
+                          })
+                        }}
+                        className="inline-flex size-8 shrink-0 items-center justify-center rounded-md bg-background/10 transition-colors hover:bg-background/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-background"
+                        aria-label="Copiar comando de autorização"
+                      >
+                        {commandCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
+                      </button>
+                    </div>
+                    <span className="sr-only" aria-live="polite">
+                      {commandCopied ? 'Comando copiado.' : ''}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="font-mono text-xs font-semibold text-foreground">03</span>
+                  <span>Abra o aplicativo normalmente pela pasta Aplicativos.</span>
+                </li>
+              </ol>
+              <p className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
+                Esta etapa é necessária enquanto a versão beta não possui notarização da Apple.
+                O comando remove a quarentena somente do Apresenta.AI Nova e não desativa o
+                Gatekeeper do seu Mac. Use-o apenas no app baixado desta página.
+              </p>
+            </div>
+          </details>
 
           {/* footnote */}
           <p className="mt-8 text-sm text-muted-foreground">
