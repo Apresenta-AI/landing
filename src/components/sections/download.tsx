@@ -221,8 +221,8 @@ export function Download() {
                   <span className="font-mono text-xs font-semibold text-foreground">02</span>
                   <div className="min-w-0 flex-1">
                     <p>Abra o Terminal, cole o comando abaixo e pressione Enter.</p>
-                    <div className="mt-3 flex items-center gap-2 rounded-lg bg-foreground p-2 pl-3 text-background">
-                      <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-xs">
+                    <div className="mt-3 flex items-start gap-2 rounded-lg bg-foreground p-2 pl-3 text-background">
+                      <code className="min-w-0 flex-1 break-all whitespace-normal font-mono text-xs leading-relaxed">
                         {MAC_AUTH_COMMAND}
                       </code>
                       <button
