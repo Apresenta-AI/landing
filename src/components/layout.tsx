@@ -30,10 +30,12 @@ export function Layout() {
       <ScrollProgress />
       <ScrollManager />
       <Header />
-      <main id="top">
-        <Outlet />
-      </main>
-      <Footer />
+      <div className="flex min-h-svh flex-col">
+        <main id="top" className="flex-1">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </ReleasesProvider>
   )
 }
