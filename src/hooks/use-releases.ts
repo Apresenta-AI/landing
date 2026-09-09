@@ -79,7 +79,13 @@ export function matchAsset(
   patterns: string[],
 ): ReleaseAsset | undefined {
   const regs = patterns.map((p) => new RegExp(p, 'i'))
-  return assets.find((a) => regs.some((r) => r.test(a.name)))
+  // Prefer the first pattern (the platform's primary format) even when
+  // GitHub returns assets in an arbitrary order. This keeps macOS downloads
+  // on the DMG installer instead of falling back to the ZIP archive.
+  return regs.reduce<ReleaseAsset | undefined>(
+    (match, regex) => match ?? assets.find((asset) => regex.test(asset.name)),
+    undefined,
+  )
 }
 
 export function formatBytes(n: number): string {
